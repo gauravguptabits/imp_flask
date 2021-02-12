@@ -1,84 +1,129 @@
-import axios from "axios";
-import React, { useState, useEffect }  from "react";
+import React from "react";
 import socketIOClient from "socket.io-client";
+import { ConnectionState } from "../Constant/AppConstants";
 
 const ENDPOINT = "http://localhost:5000/";
 
-// let socket = null
-
-const Hompage = () => {
-
-    const [connected, setConnected] = useState("Not Connected");
-    const [responseTime, setResponseTime] = useState('0')
-
-
+class Hompage extends React.Component {
+  constructor(props) {
+    super(props);
     const date = new Date();
-    const time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() ;
 
-    
-   let socket = socketIOClient(ENDPOINT);
-   console.log(socket)
-    const handleConnect = ()=>{
-        socket.on("speed_change", data => {
-            console.log(data)
-            const response = data.speed;
-            setResponseTime(response);
-            console.log(socket)
-        });
-        setConnected("Connected")
-            }
-            // console.log(socket)
+    this.socket = null;
+    this.state = {
+      status: ConnectionState.Disconnected,
+      time: date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(),
+      speed: 0,
+    };
+  }
 
-    const handleDisconnect = ()=>{
-        //  socket = socketIOClient(ENDPOINT);
-        socket.close();
-        
-        socket = null
-        console.log(socket)
-        console.log("diconnectd")
-        setConnected("Not Connected")
-    } 
+  // function Used to get the data from the server
+  handleSpeedChange = (data) => {
+    const date = new Date(data.ts);
+    this.setState({
+      time: date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(),
+      speed: data.speed,
+    });
+  };
 
-    // useEffect(() => {
-    //     const socket = socketIOClient(ENDPOINT);
-    //     socket.on("speed_change", data => {
-    //         console.log(data)
-    //         const response = data.speed;
-    //         setResponseTime(response);
-    //     });
-    //   }, );
+  // An event Handler to activate the Server
+  handleConnectClickEvent = () => {
+    console.log("Connect#clicked");
+    this.socket = socketIOClient(ENDPOINT); // sending a connect request to the server.
+    this.socket.on("speed_change", this.handleSpeedChange);
+    this.setState({
+      status: ConnectionState.Connected,
+    });
+  };
 
-  return (
-    <div>
-      <div className="container h-100">
-		<div className="d-flex justify-content-center h-100">
-			<div className="user_card bg-warning">
-				<h1 className="text-center text-white"> Demo Web Socket </h1>
-				<hr/>
-				<h5 className="text-center text-dark">Status: {connected} </h5>
-				<h6 className="text-center text-secondary" >{time} </h6>
-				<h1 className="display-1 text-center text-secondary">
-					{responseTime}
-				</h1>
-				<div className="row">
-					<button id="start_button"
-							type="button"
-							name="button"
-                            onClick={handleConnect}
-							className="btn btn-success col-sm-4 offset-sm-1">Connect</button>
-					<button id="stop_button"
-							type="button"
-							name="button"
-                            onClick={handleDisconnect}
-							className="btn btn-danger col-sm-4 offset-sm-1">Disconnect</button>
-				</div>
+  // An Event Handler to Deactivate the Server
+  handleDisconnectClickEvent = () => {
+    console.log("Disconnect#clicked");
+    this.socket.disconnect();
+    this.setState({ status: ConnectionState.Disconnected });
+  };
 
-			    <footer className="blockquote-footer text-center">by <cite><small>Impressico Business Solution</small> </cite> </footer>
-			</div>
-		</div>
-	</div>
-    </div>
-  );
-};
+  render = () => {
+    console.log(this.state.status);
+    return (
+      <div>
+        <div className="container h-100">
+          <div className="d-flex justify-content-center h-100">
+            <div className="user_card bg-warning">
+              <h1 className="text-center text-white"> Demo Web Socket </h1>
+              <hr />
+              <h5 className="text-center text-dark">
+                Status: {this.state.status}{" "}
+              </h5>
+              <h6 className="text-center text-secondary">{this.state.time} </h6>
+              <h1 className="display-1 text-center text-secondary">
+                {this.state.speed}
+              </h1>
+              <div className="d-flex flex-row justify-content-around">
+                {this.state.status == ConnectionState.Connected ? (
+                  <div>
+                    <button
+                      id="start_button"
+                      type="button"
+                      name="button"
+                      className="btn btn-success "
+                      disabled
+                    >
+                      Connect
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      id="start_button"
+                      type="button"
+                      name="button"
+                      onClick={this.handleConnectClickEvent}
+                      className="btn btn-success "
+                    >
+                      Connect
+                    </button>
+                  </div>
+                )}
+                {this.state.status == "Not Connected" ? (
+                  <div>
+                    <button
+                      id="stop_button"
+                      type="button"
+                      name="button"
+                      className="btn btn-danger"
+                      disabled
+                    >
+                      Disconnect
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <button
+                      id="stop_button"
+                      type="button"
+                      name="button"
+                      onClick={this.handleDisconnectClickEvent}
+                      className="btn btn-danger"
+                    >
+                      Disconnect
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <footer className="blockquote-footer text-center">
+                by{" "}
+                <cite>
+                  <small>Impressico Business Solution</small>{" "}
+                </cite>{" "}
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+}
 
 export default Hompage;
