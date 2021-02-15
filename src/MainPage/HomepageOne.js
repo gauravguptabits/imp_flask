@@ -145,8 +145,8 @@ class HompageOne extends React.Component {
                 />
               </span>
             </div>
-            <div className="display-12 text-left">
-              Streaming Server Logs:
+            <div className=" display-12 text-left">
+              <p className="text-left mb-2">Streaming Server Logs:</p>
               <ListGroup
                 className="display-12"
                 style={{ height: "210px", overflow: "auto" }}
