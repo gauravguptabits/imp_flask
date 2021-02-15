@@ -1,6 +1,7 @@
 import React from "react";
 import socketIOClient from "socket.io-client";
 import { ConnectionState } from "../Constant/AppConstants";
+import ReactSpeedometer from "react-d3-speedometer"
 
 const ENDPOINT = "http://localhost:5000/";
 
@@ -47,18 +48,37 @@ class Hompage extends React.Component {
     console.log(this.state.status);
     return (
       <div>
+
         <div className="container h-100">
           <div className="d-flex justify-content-center h-100">
-            <div className="user_card bg-warning">
+            <div className="">
               <h1 className="text-center text-white"> Demo Web Socket </h1>
               <hr />
-              <h5 className="text-center text-dark">
+
+              <h5 className="text-center text-white mb-4">
                 Status: {this.state.status}{" "}
               </h5>
-              <h6 className="text-center text-secondary">{this.state.time} </h6>
+              <div style={{height:"230px"}}>
+                    <ReactSpeedometer
+                    className="mt-3"
+                        maxValue={100}
+                        value={"Speed",this.state.speed}
+                        currentValueText={"Speed : ${value}"}
+                        segments={10}
+                        textColor={"#c9c9c9"}
+                        needleColor={"#c9c9c9"}
+                        ringWidth={10}
+                        labelFontSize={"10px"}
+                        segmentColors={[
+                          "#1c9bba",
+                        ]}
+                    />
+              </div>
+
+              {/* <h6 className="text-center text-secondary">{this.state.time} </h6>
               <h1 className="display-1 text-center text-secondary">
                 {this.state.speed}
-              </h1>
+              </h1> */}
               <div className="d-flex flex-row justify-content-around">
                 {this.state.status == ConnectionState.Connected ? (
                   <div>
