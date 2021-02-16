@@ -42,3 +42,19 @@
   height: 210px;
   overflow-y: auto;
 }
+
+@media screen and (max-width: 500px) {
+  .resize {
+    color: white;
+    width: 400px;
+    height: 300px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .resize {
+    color: white;
+    width: 300px;
+    height: 300px;
+  }
+}

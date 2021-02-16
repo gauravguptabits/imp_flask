@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import socketIOClient from "socket.io-client";
 import ReactSpeedometer from "react-d3-speedometer";
 import TrafficLight from "react-trafficlight";
@@ -23,7 +23,6 @@ class HompageOne extends React.Component {
 
   // function Used to get the data from the server
   handleSpeedChange = (data) => {
-    const response = data.speed;
     const date = new Date(data.ts);
     const logs = [data.text, ...this.state.logs];
 
@@ -37,7 +36,7 @@ class HompageOne extends React.Component {
         date.getSeconds() +
         " >",
       speed: data.speed,
-      status: "Connected",
+      status: ConnectionState.Connected,
       logs: logs,
     });
   };
@@ -45,11 +44,11 @@ class HompageOne extends React.Component {
   // An event Handler to activate the Server
   handleConnectClickEvent = () => {
     console.log("Connect#clicked");
-    this.socket = socketIOClient(ENDPOINT);
+    this.socket = socketIOClient(ENDPOINT); 
     this.socket.on("speed_change", this.handleSpeedChange);
     // socket.on("disconnect", handleDisconnectAcknowlegment);
     this.setState({
-      status: "Connecting",
+      status: ConnectionState.Connecting,
     });
   };
 
@@ -64,9 +63,12 @@ class HompageOne extends React.Component {
   render = () => {
     return (
       <div className="container h-100">
-        <div class="row">
-          <div class="col-lg-8 d-flex flex-column align-items-center">
-            <div style={{ height: "300px", width: "500px" }}>
+        <div className="row my-3">
+          <div className="col-lg-8 d-flex flex-column align-items-center">
+            <div 
+            style={{ height: "300px", width: "400px" }} 
+            className="resize">
+              {/* React-d3-speedometer package used to display the speeed */}
               <ReactSpeedometer
                 className="mt-3"
                 maxValue={100}
@@ -82,7 +84,7 @@ class HompageOne extends React.Component {
               />
 
               <div className="row justify-content-around">
-                {this.state.status == ConnectionState.Connected ? (
+                {this.state.status === ConnectionState.Connected ? (
                   <button
                     id="start_button"
                     type="button"
@@ -104,7 +106,7 @@ class HompageOne extends React.Component {
                   </button>
                 )}
 
-                {this.state.status == "Not Connected" ? (
+                {this.state.status === ConnectionState.Disconnected ? (
                   <button
                     id="stop_button"
                     type="button"
@@ -130,7 +132,7 @@ class HompageOne extends React.Component {
 
             <br />
           </div>
-          <div className="col-lg-4 conn_monitor mt-5 mt-lg-0">
+          <div className="col-lg-4 col-10 mx-auto conn_monitor mt-5 mt-lg-0">
             <div className="display-8">Socket monitor</div>
             <hr className="hr_separator" style={{ background: "white" }} />
             <div className="display-12 text-left">
@@ -138,9 +140,9 @@ class HompageOne extends React.Component {
               Status:
               <span>
                 <TrafficLight
-                  GreenOn={this.state.status.toLowerCase() == "connected"}
-                  RedOn={this.state.status.toLowerCase() == "not connected"}
-                  YellowOn={this.state.status.toLowerCase() == "connecting"}
+                  GreenOn={this.state.status.toLowerCase() === "connected"}
+                  RedOn={this.state.status.toLowerCase() === "not connected"}
+                  YellowOn={this.state.status.toLowerCase() === "connecting"}
                   Horizontal
                 />
               </span>
@@ -152,7 +154,7 @@ class HompageOne extends React.Component {
                 style={{ height: "210px", overflow: "auto" }}
               >
                 {this.state.logs.map((log, index, _) => {
-                  const isDisabled = index == 0 ? true : false;
+                  const isDisabled = index === 0 ? true : false;
                   return (
                     <ListGroup.Item
                       disabled={isDisabled}
