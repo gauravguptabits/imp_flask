@@ -4,8 +4,9 @@ import ReactSpeedometer from "react-d3-speedometer";
 import TrafficLight from "react-trafficlight";
 import ListGroup from "react-bootstrap/ListGroup";
 import { ConnectionState } from "../Constant/AppConstants";
+import config from "../Constant/config";
 
-const ENDPOINT = "http://localhost:5000/";
+const ENDPOINT = config.BASE_URL;
 
 class HompageOne extends React.Component {
   constructor(props) {
