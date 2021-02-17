@@ -29,6 +29,7 @@ class HompageOne extends React.Component {
     const logs = [formattedLog, ...this.state.logs];
 
     this.setState({
+      speed: data.speed,
       status: ConnectionState.Connected,
       logs: logs,
     });
