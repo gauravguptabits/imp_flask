@@ -25,7 +25,7 @@ class HompageOne extends React.Component {
   // function Used to get the data from the server
   handleSpeedChange = (data) => {
     const date = new Date(data.ts);
-    const formattedLog = `${date} || ${data.text}`;
+    const formattedLog = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} || ${data.text}`;
     const logs = [formattedLog, ...this.state.logs];
 
     this.setState({
