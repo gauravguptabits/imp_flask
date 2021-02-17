@@ -1,19 +1,26 @@
-# Getting Started with Create React App
+# About
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Simple Reactjs boilerplate for socket communication. 
+- UI offers a start and stop button to establish connection with server. 
+- In addtiion to above , `speed` and `text log` events being thrown by server are shown in form of speedometer.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+1. Build on top of production ready standard boilerplate.
+2. Configuration driven.
+3. Component structure for decoupling.
+4. Code linting.
+5. 
 
-### `yarn start`
+## Further Improvement
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Addition of `redux` for workflow management for larger app.
+2. Socket server connection mechanism on `worker thread`.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Setup instruction
 
+1. `yarn install`
+2. `yarn start` 
 
 
 
