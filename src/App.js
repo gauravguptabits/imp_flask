@@ -1,11 +1,11 @@
 import './App.css';
-import HompageOne from './MainPage/HomepageOne';
+import UserApp from './Screens';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <HompageOne />
+        <UserApp />
       </header>
     </div>
   );
